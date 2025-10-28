@@ -1,25 +1,38 @@
 import 'react-native-gesture-handler';
-import React, { useEffect, useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { NavigationContainer } from '@react-navigation/native';
-import Routes from './src/routes/index';
+import Routes from './src/routes';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { ProvedorAuth } from './src/global/AuthContext';
+import { ActivityIndicator, View } from 'react-native';
 import api from './src/services/api';
 
 export default function App() {
-  const [pronto, setPronto] = useState(false);
+  const [carregando, setCarregando] = useState(true);
   const [usuarios, setUsuarios] = useState([]);
 
   useEffect(() => {
-    api.get('/usuarios')
-      .then(response => {
+    const carregarDados = async () => {
+      try {
+        const response = await api.get('/usuarios');
         console.log('Usuários:', response.data);
-        setPronto(true);
-      })
-      .catch(error => console.log(error));
+        setUsuarios(response.data);
+      } catch (error) {
+        console.log(error);
+      } finally {
+        setCarregando(false);
+      }
+    };
+    carregarDados();
   }, []);
 
-  if (!pronto) return null; // ou coloque um spinner se quiser
+  if (carregando) {
+    return (
+      <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+        <ActivityIndicator size="large" color="#0000ff" />
+      </View>
+    );
+  }
 
   return (
     <SafeAreaProvider>
@@ -31,3 +44,4 @@ export default function App() {
     </SafeAreaProvider>
   );
 }
+

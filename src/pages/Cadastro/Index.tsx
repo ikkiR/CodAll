@@ -1,5 +1,6 @@
 import React, { useRef } from "react";
 import { Text, Image, TextInput, TouchableOpacity, View, ActivityIndicator, KeyboardAvoidingView, Platform, ScrollView, SafeAreaView, Keyboard, Alert } from "react-native";
+import { Picker } from '@react-native-picker/picker';
 import { styles } from "./styles";
 import Logo from "../../Assets/logo.png";
 import { Input } from "../../components/input";
@@ -19,6 +20,8 @@ export default function Cadastro() {
   const [complement, setComplement] = React.useState('');
   const [district, setDistrict] = React.useState('');
   const [city, setCity] = React.useState('');
+  const [role, setRole] = React.useState<'aluno' | 'supervisor'>('aluno');
+  const [matricula, setMatricula] = React.useState('');
   const [loading, setLoading] = React.useState(false);
   const emailRef = useRef<TextInput>(null);
   const passwordRef = useRef<TextInput>(null);
@@ -69,7 +72,8 @@ export default function Cadastro() {
       !address.trim() ||
       !number.trim() ||
       !district.trim() ||
-      !city.trim()
+      !city.trim() ||
+  (role === 'supervisor' && !matricula.trim())
     ) {
       Alert.alert('Atenção', 'Preencha todos os campos!');
       return;
@@ -85,7 +89,7 @@ export default function Cadastro() {
       const cpfRaw = somenteDigitos(cpf);
       const cepRaw = somenteDigitos(cep);
       const phoneRaw = somenteDigitos(phone);
-      await api.post('/usuarios',{
+      const payload: any = {
         nome:name,
         email:email,
         senha:password,
@@ -97,7 +101,12 @@ export default function Cadastro() {
         complemento: complement,
         bairro:district,
         cidade: city,
-      });
+  tipo_usuario: role === 'supervisor' ? 'supervisor' : 'aluno',
+      };
+  if (role === 'supervisor') payload.matricula = matricula;
+
+      await api.post('/usuarios', payload);
+      
       setLoading(false);
       Alert.alert('Sucesso', 'Usuário cadastrado com sucesso!', [
         {
@@ -120,6 +129,8 @@ export default function Cadastro() {
       setComplement('');
       setDistrict('');
       setCity('');
+      setRole('aluno');
+      setMatricula('');
   Keyboard.dismiss();
     } catch (e: any) {
       setLoading(false);
@@ -159,8 +170,25 @@ export default function Cadastro() {
                 <Image source={Logo} />
                  <Text style={styles.text}> Cadastre-se para começar sua jornada na programação !!</Text>
               </View>
-
               <View>
+                <View style={styles.roleRow}>
+                  <Text style={styles.pickerLabel}>Tipo de Conta</Text>
+                  <View style={styles.roleToggle}>
+                    <TouchableOpacity
+                      style={[styles.roleButton, role === 'aluno' ? styles.roleButtonActive : null]}
+                      onPress={() => setRole('aluno')}
+                    >
+                      <Text style={[styles.roleButtonText, role === 'aluno' ? styles.roleButtonTextActive : null]}>Aluno</Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity
+                      style={[styles.roleButton, role === 'supervisor' ? styles.roleButtonActive : null]}
+                        onPress={() => setRole('supervisor')}
+                      >
+                        <Text style={[styles.roleButtonText, role === 'supervisor' ? styles.roleButtonTextActive : null]}>Supervisor</Text>
+                    </TouchableOpacity>
+                  </View>
+                </View>
+
                 <Input
                   value={email}
                   onChangeText={setEmail}
@@ -199,6 +227,15 @@ export default function Cadastro() {
                   onSubmitEditing={() => phoneRef.current?.focus()}
                   ref={nameRef}
                 />
+                {role === 'supervisor' && (
+                  <Input
+                    value={matricula}
+                    onChangeText={setMatricula}
+                    title="Matrícula"
+                    placeholder="Digite sua matrícula"
+                    returnKeyType="next"
+                  />
+                )}
                 <Input
                   value={phone}
                   onChangeText={(t) => setPhone(maskPhone(t))}

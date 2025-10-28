@@ -12,7 +12,7 @@ export type Usuario = {
 type DadosContextoAuth = {
   usuario: Usuario | null;
   carregando: boolean;
-  entrar: (email: string, senha: string) => Promise<void>;
+  entrar: (login: string, senha: string) => Promise<void>;
   sair: () => Promise<void>;
   carregarSessao: () => Promise<void>;
 };
@@ -58,10 +58,10 @@ export function ProvedorAuth({ children }: ProvedorAuthProps) {
   }, [carregarSessao]);
 
   // Login
-  const entrar = useCallback(async (email: string, senha: string) => {
+  const entrar = useCallback(async (login: string, senha: string) => {
     setCarregando(true);
     try {
-      const resp = await api.post('/usuarios/login', { email, senha });
+      const resp = await api.post('/usuarios/login', { login, senha });
       const data = resp.data;
       console.log('[AuthContext] login response:', data);
 

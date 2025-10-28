@@ -33,9 +33,11 @@ export function Cabecalho({ onPressUser, onPressLogout }: CabecalhoProps) {
         <MaterialIcons name="person" size={26} color="#000" />
       </TouchableOpacity>
 
+      <TouchableOpacity style={styles.logo} onPress={() => navigation.navigate("Home")}>
       <View style={styles.center}>
         <Image source={Logo} style={styles.logo} resizeMode="contain" />
       </View>
+      </TouchableOpacity>
 
       <TouchableOpacity onPress={handleLogout} style={styles.sideButton}>
         <MaterialIcons name="logout" size={24} color="#000" />
