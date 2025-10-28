@@ -101,7 +101,7 @@ export default function Cadastro() {
         complemento: complement,
         bairro:district,
         cidade: city,
-  tipo_usuario: role === 'supervisor' ? 'supervisor' : 'aluno',
+        tipo_usuario: role === 'supervisor' ? 'supervisor' : 'aluno',
       };
   if (role === 'supervisor') payload.matricula = matricula;
 

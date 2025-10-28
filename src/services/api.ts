@@ -3,7 +3,7 @@ import axios from 'axios';
 
 // Cria a instância do Axios
 const api = axios.create({
-  baseURL:'http://10.6.74.213:5000', // IP do Flask
+  baseURL:'http://10.6.74.220:5000', // IP do Flask
 });
 
 // Função para setar o token de autenticação nas requisições
