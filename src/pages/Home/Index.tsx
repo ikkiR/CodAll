@@ -52,7 +52,7 @@ export default function Home() {
         <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
           <View style={styles.container}>
             <View style={{ paddingHorizontal: 16, paddingTop: 12 }}>
-              <Text style={styles.nome}>Olá, {usuario.nome} 👋</Text>
+              <Text style={styles.nome}>Olá, {usuario?.nome ?? (usuario as any)?.name ?? 'Usuário'} 👋</Text>
               <Text style={styles.MeusCursos}>Meus Cursos</Text>
 
               {/* HTML */}
