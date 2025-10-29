@@ -11,6 +11,7 @@ import CursoHtml from '../pages/CursoHtml/modulo1/index';
 import CursoHtml2 from '../pages/CursoHtml/Modulo2/index';
 import CursoHtml3 from '../pages/CursoHtml/modulo3';
 import JogoTags from '../pages/JogoTags/JogoTags';
+import Perfil from '../pages/Perfil/Index';
 
 export type RootStackParamList = {
   Login: undefined;
@@ -49,11 +50,11 @@ export default function Routes() {
         component={Home} 
           options={{ headerShown: true, header: () => <Cabecalho /> }} 
       />
-        {/* <Stack.Screen 
+        <Stack.Screen 
           name="Perfil" 
           component={Perfil} 
             options={{ headerShown: true, header: () => <Cabecalho /> }} 
-        /> */}
+        />
         <Stack.Screen 
           name="CursoHtml" 
           component={CursoHtml} 
