@@ -55,7 +55,7 @@ export default function Perfil() {
           if (!Number.isNaN(n) && Number.isInteger(n)) {
             userId = n;
           } else {
-            console.log('[Perfil] id do token não é inteiro válido, usando fallback /usuarios/me - idRaw:', idRaw);
+              // id do token não é inteiro válido, usaremo fallback /usuarios/me
           }
         }
 
@@ -63,16 +63,7 @@ export default function Perfil() {
 
         // DEBUG: log da URL que vamos chamar e headers atuais do axios (útil para verificar Authorization)
         try {
-          console.log('[Perfil] Tentando GET', attemptUrl);
-          console.log('[Perfil] axios defaults headers:', api.defaults?.headers?.common);
-          // log mascarado do token salvo no AsyncStorage (não expor token completo)
-          try {
-            const tokenDbg = await AsyncStorage.getItem('@codeall:token');
-            const maskedToken = tokenDbg ? `${String(tokenDbg).slice(0,6)}...${String(tokenDbg).slice(-6)}` : null;
-            console.log('[Perfil] token (mascarado):', maskedToken);
-          } catch (e) {
-            // ignore
-          }
+            // removed non-error debug logs (URL/headers/token) to avoid exposing sensitive info
         } catch (e) {
           // ignore
         }
@@ -121,11 +112,9 @@ export default function Perfil() {
         });
       } catch (err: any) {
           // DEBUG: informações detalhadas para diagnóstico
+          // Erro — manter logs apenas de erro (não logar headers ou tokens)
           console.log('[Perfil] Erro ao carregar perfil. url:', err?.config?.url);
           console.log('[Perfil] status:', err?.response?.status);
-          console.log('[Perfil] response data:', err?.response?.data);
-          console.log('[Perfil] request headers sent:', err?.config?.headers);
-
           console.log('Erro ao carregar perfil:', err?.response?.data ?? err);
           Alert.alert('Erro', err?.response?.data?.message ?? 'Falha ao carregar perfil.');
       } finally {

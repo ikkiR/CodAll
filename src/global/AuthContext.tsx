@@ -175,13 +175,7 @@ export function ProvedorAuth({ children }: ProvedorAuthProps) {
 
       if (sessao) setUsuario(JSON.parse(sessao));
       if (token) setAuthToken(token || null);
-        // DEBUG (mascarado): confirma que existe um token salvo sem expor todo o valor
-        try {
-          const masked = token ? `${String(token).slice(0,6)}...${String(token).slice(-6)}` : null;
-          console.log('[AuthContext] token (mascarado) ao carregar sessão:', masked);
-        } catch (e) {
-          // ignore
-        }
+        // removed debug logs that exposed token fragments
     } catch (e) {
       console.log('Erro ao carregar sessão:', e);
     } finally {
